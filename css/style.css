@@ -1,0 +1,167 @@
+@import url('reset.css');
+@import url('text.css');
+@import url('960.css');
+
+/* @group General Styling */
+
+body {
+background: #fff;
+color: #8c8c8c;
+padding-top: 40px;
+text-shadow: #e8e8e8 1px 1px 0;
+}
+
+a {
+display: block;
+color: #404a47;
+text-decoration: none;
+}
+
+a:hover {
+text-decoration: underline;
+color: #ef3e63;
+color: #ff7d4a;
+}
+
+#sidebar {
+	position: fixed;
+	width: 360px;
+	height:400px;
+	
+}
+
+.toppadding{
+padding-top:120px;
+}
+/* Site Logo */
+h1.logo {
+background: url(../img/semicolon-labs-logo-small.png) no-repeat;
+height: 110px;
+width: 360px;
+
+}
+
+/* Site Logo Link Styling*/
+h1.logo a {
+display: block;
+text-indent: -9999px;
+}
+
+/* Site Logo Hover Effect*/
+h1.logo:hover {
+opacity: 0.90;
+}
+
+
+img {
+margin-bottom: 0px;
+}
+
+img:hover {
+opacity: 0.75;
+}
+
+
+.title {
+color: #404a47;
+margin-bottom: 10px;
+display: block;
+}
+
+/* Portfolio Project Title Links */
+a.project {
+margin-bottom: 10px;
+}
+
+/* @end */
+
+
+/* @group Navigation */
+
+/* Navigation Buttons */
+ul.navigation li a:active {
+opacity: 0.50;
+}
+
+
+.simple_button{
+width: 110px;
+height: 18px;
+display: block;
+background: url(../img/nav_bg.png) no-repeat;
+padding-left: 30px;
+color: #fff;
+padding-top: 2px;
+margin-bottom: 10px;
+text-shadow: none;
+}
+
+/* Navigation Hover State */
+.simple_button:hover {
+background: url(../img/nav_bg.png) no-repeat -140px 0;
+text-decoration: none;
+color: #fff;
+}
+
+/* @end */
+
+/* @group UL for Portfolio Description */
+
+/* Unordered List for portfolio piece features */
+ul {
+list-style-type: none;
+margin-top: 10px;
+margin-bottom: 20px;
+
+}
+
+ul li.desc {
+height: 12px;
+margin-bottom: 5px;
+}
+
+ul.contact {
+margin-top: 23px;
+}
+
+ul.contact li {
+margin-top: 20px;
+}
+/* @end */
+
+/* @group Footer */
+
+.footerleft {
+padding-left: 20px;
+color: #fff;
+padding-bottom: 12px;
+background: url(../img/footer_bg.png) no-repeat;
+padding-top: 2px;
+width: 310px;
+float: left;
+text-shadow: none;
+}
+
+.footerleft a {
+display: inline;
+color: #fff;
+}
+
+.footerright a {
+display: inline;
+color: #fff;
+}
+
+.footerright {
+padding-right: 20px;
+color: #fff;
+padding-bottom: 12px;
+background: url(../img/footer_bg.png) no-repeat -330px 0;
+width: 270px;
+float: right;
+text-align: right;
+padding-top: 2px;
+text-shadow: none;
+}
+
+/* @end */
