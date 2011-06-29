@@ -39,7 +39,7 @@
 
 	//resources
 	var rect= new Image(60,60);
-	rect.src= "/rect.png";
+	rect.src= "./rect.png";
 
 	var bag_img = new Image(60,60);
 	bag_img.src= "./tiger.png";
