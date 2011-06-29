@@ -1,0 +1,508 @@
+<html>
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
+<meta name="keywords" content="Typing Tutor, HTML5 Typing Tutor, Javascript Typing Tutor, Keyboard in HTML5 Canvas" />
+<meta name="description" content="Typing tutor build in HTML5 Canvas/Javascript " />
+
+<title>Semicolon Labs :: HTML5 Typing Tutor :: Semicolon Developers, Kathmandu, Nepal</title>
+	
+	
+<style type="text/css">
+button{
+margin-top:5px;
+margin-left:5px;
+
+}
+#button
+{float:left;}
+
+#wrapper
+{
+background:url(bg.jpg) repeat-y;
+margin:40px auto;
+width: 1016px;
+border:2px solid
+}
+#sprites
+{
+margin-left: 123px;
+margin-top:10px;
+margin-bottom:5px;
+}
+#canvas
+{margin-top:5px;
+margin-left:5px;
+}
+
+#time{margin-top:5px; width: 125px; padding-left:5px; float:left;border:solid;}
+
+#footer
+{ 		
+color:#000;		
+text-align: center;
+font-size:11px;		
+}
+
+#footer a{
+font-weight: bold;
+color: #666;
+}
+	
+	
+</style>
+
+<script type="text/javascript">
+/*
+-----------------------------------------------------
+@name           Typing Tutor in HTML5/Canvas 
+@version        0.1
+@author         Bimal Sharma
+@author-url     http://bimalsharma.com.np 
+@scripturl      http://labs.semicolondev.com
+@description    Online Typing Tutor  
+-----------------------------------------------------
+*/
+
+ /*----------------variables------------------------------*/
+                
+		var str="HTML5 TYPING TUTOR: Add a string to start typing";
+		var context,canvas;                                                    // variables to assign canvas context
+		var x, y;                                                             //coordinates
+		var cursorShift=70;
+		var alterCursor=0;                                                     //for blinking cursor
+		var i=0,strLength=0,countSpaceDetect=0,strCount=0,rectClear=0;          //variables for string manipulation
+		var tempRectArray,tempCount=0,countSpace=0,startCountTimes=1;         //variables for array manipulation
+		var charc,chac;                                                       //character conversion and manipulation
+		var keyEventactivate=0;
+		var time=0,time1,endTime= 1, startTime=0,stops_count=1,stopTime=0;  //time variables
+		var t, times;                                                          //time class
+		
+		var rectangles = [];
+		var letters="QWERTYUIOP[]ASDFGHJKL:'ZXCVBNM,./";
+		var lettersm="qwertyuiop{}asdfghjkl;'zxcvbnm<>?";
+        var img1=new Image(30,30);
+		img1.src="button.jpg";
+		var img2=new Image(30,30);
+		img2.src="button2.jpg";
+		var img3=new Image(30,30);
+		img3.src="shift.jpg";
+		var img4=new Image(30,30);
+		img4.src="space.jpg";
+		var img5=new Image(30,30);
+		img5.src="shift2.jpg";
+		var img6=new Image(30,30);
+		img6.src="space2.jpg";
+/*-------------------------------------------------------*/
+        
+/*-----------------initialization-------------------------*/	
+
+     	t = new Date();
+		times=new Date();
+		
+		for (var n = 0; n < 34; n++) 
+		{
+			if(n<12)
+			{
+				rectangles.push(  
+				{
+					x: n * 53 + 180,
+					y: 250,
+					width: 50,
+					height: 50,
+					color: img1,
+					color1:img2,
+					letter:letters[n],
+					letter1:lettersm[n],
+				}); 
+			}
+			else	if(n>=12&&n<23)
+			{
+				rectangles.push(
+				{
+					x: (n-11.5) * 53 + 180,
+					y: 310,
+					width: 50,
+					height: 50,
+					color:img1,
+					color1:img2,
+					letter:letters[n],
+					letter1:lettersm[n],
+				});
+			}
+			else if(n==33)
+			{
+				rectangles.push(  
+				{
+					x: (n-30.5) * 53 + 180,
+					y: 430,
+					width: 300,
+					height: 50,
+					color: img4,
+					color1:img6,
+					letter:"               Space bar",
+					letter1:"               Space bar",
+				}); 
+			}
+			else if(n==23)
+			{
+				rectangles.push(  
+				{
+					x: (n-23) * 53 + 180,
+					y: 370,
+					width: 100,
+					height: 50,
+					color: img3,
+					color1:img5,
+					letter:"  Shift",
+					letter1:"  Shift",
+				}); 
+			}
+			else if (n>23&&n<33)
+			{
+				rectangles.push(
+				{
+					x: (n-22) * 53 + 180,
+					y:370,
+					width: 50,
+					height: 50,
+					color:img1,
+					color1:img2,
+					letter:letters[n-1],
+					letter1:lettersm[n-1],
+				});
+			}
+		}
+
+
+		//var streng=new Array();
+		var strings=new Array();
+
+		//initialize strings
+
+		strings[0] =     "the quick brown fox jumps over the lazy dog";
+		strings[1] =     "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
+		strings[2] =     "The Quick Brown Fox Jumps Over The Lazy Dog";
+		strings[3] =     "the quick brown fox jumps over the lazy dog";
+		strings[4] =     "The Quick Brown Fox Jumps Over The Lazy Dog";
+
+		totalStrCount = strings.length;
+/*-------------------------------------------------------*/
+
+
+/*----------------loading windows---------------------------*/
+		window.onload = function()
+		{   
+			canvas = document.getElementById("canvas");               //pass the canvas element
+			context = canvas.getContext("2d");                        //get the context
+			x = canvas.width / 15;
+			y = canvas.height / 9;
+			var times = new Date();
+			startTime = times.getTime();
+			  
+			setInterval("display(context)",100);                     //call dispaly in every 100 milliseconds
+		}; 
+		/*-------------------------------------------------------*/
+
+
+			function display(context)                               // display the whole context
+			{  
+				var t = new Date();
+				endTime = t.getTime();
+				time =(endTime-startTime);			
+				if(countSpaceDetect) 
+				{   countSpace++;
+					countSpaceDetect=0;
+				}
+
+				if(keyEventactivate=1)                                  //activate keyboard event
+				document.addEventListener('keypress',doKeyDown,true);
+				
+				context.strokeRect(60,140,880,80);
+				context.strokeRect(10,10,980,70);			  
+
+				context.clearRect(10,10,980,70);
+				context.font = "20px Verdana";
+				context.textBaseline = "middle";
+				//context.fillStyle = "blue"; 			
+				context.fillText(str,x,y);
+                
+				if(stops_count)
+				displayTime(time);
+				else if(strCount == totalStrCount)
+				stopCounting(stopTime);
+				
+				for(n=0;n<34;n++)
+				{
+					//context.fillStyle=rectangles[n].color;
+					 context.drawImage(rectangles[n].color,rectangles[n].x,rectangles[n].y);
+					context.strokeRect(rectangles[n].x,rectangles[n].y,rectangles[n].width,rectangles[n].height);
+					context.fillText(rectangles[n].letter1,rectangles[n].x+20,rectangles[n].y+20);
+				}
+
+
+				for(n=0;n<34;n++)
+				{
+					if(str[i]==rectangles[n].letter)
+					{ 
+						//rectangles[n].color="#000088";
+						context.strokeRect(rectangles[n].x,rectangles[n].y,rectangles[n].width,rectangles[n].height);
+						 context.drawImage(rectangles[n].color1,rectangles[n].x,rectangles[n].y);
+						context.fillText(rectangles[n].letter,rectangles[n].x+20,rectangles[n].y+20);
+						context.drawImage(rectangles[23].color1,rectangles[23].x,rectangles[23].y);
+						context.strokeRect(rectangles[23].x,rectangles[23].y,rectangles[23].width,rectangles[23].height);
+						context.fillText(rectangles[23].letter,rectangles[23].x+20,rectangles[23].y+20);
+						tempRectArray=n;
+
+					}
+					if(str[i]==rectangles[n].letter1)
+					{ //colour=1;
+						//rectangles[n].color="#000088";
+						context.strokeRect(rectangles[n].x,rectangles[n].y,rectangles[n].width,rectangles[n].height);
+						context.drawImage(rectangles[n].color1,rectangles[n].x,rectangles[n].y);
+						context.fillText(rectangles[n].letter1,rectangles[n].x+20,rectangles[n].y+20);
+						tempRectArray=n;
+						shiftKeyactive=1;
+					}
+					if(str[i]==" " && rectangles[n].letter=="               Space bar")
+					{   //rectangles[n].color="#504A4B";
+						context.strokeRect(rectangles[n].x,rectangles[n].y,rectangles[n].width,rectangles[n].height);
+						context.drawImage(rectangles[n].color1,rectangles[n].x,rectangles[n].y);
+						//rectangles[n].color="#000000";
+						context.fillText(rectangles[n].letter,rectangles[n].x+20,rectangles[n].y+20);
+						tempRectArray=n;
+					}
+				}
+				//context.fillStyle = "black";
+				putCursor();
+
+				if(str.length == strLength)
+				{  // alert(strCount);
+				      	str=strings[strCount];
+					rectClear=1;
+					strLength=0;
+					i=0;
+                                          strCount++;
+                                        context.clearRect(50,140,1100,80);
+			        }
+
+				if(strCount==totalStrCount)
+				    {  strCount=0;
+                                        i=0;
+                                        strlength=0;
+                                    }
+				if(tempCount==totalStrCount)
+				   tempCount=0;
+				//context.clearRect(60,120,880,90);
+                               
+			}
+
+	function putCursor() //cursor palcing
+	{       keyEventactivate=1;
+		if(alterCursor%2==0)
+		context.fillStyle = "white"; 
+		else
+		context.fillStyle = "black";
+		alterCursor++;
+		if(alterCursor>10) alterCursor=0;
+		context.fillText("_",cursorShift,185);
+		context.fillStyle = "black";
+	}
+
+		function doKeyDown(e) //keyboard event
+		{   
+
+			if(startCountTimes)
+			{var times = new Date();
+			startTime = times.getTime();
+			}
+			stops_count=1;
+			startCountTimes=0;
+			//time=countSpace/timeCount;			  				 				  				  			  						  				  				  
+			//alert(timeCount);
+
+			charc=charConvert(e.keyCode);
+			//alert(charc+str[i]);
+			if(str[i]==charc)
+			{  	//rectangles[tempRectArray].color="#FF0000";
+				context.clearRect(rectangles[tempRectArray].x,
+				rectangles[tempRectArray].y,rectangles[tempRectArray].width,
+				rectangles[tempRectArray].height);
+				if(str[i]==" ")
+				countSpaceDetect=1;
+				context.strokeRect(rectangles[tempRectArray].x,
+				rectangles[tempRectArray].y,rectangles[tempRectArray].width,
+				rectangles[tempRectArray].height);
+				if(shiftKeyactive=1)
+				{
+					context.clearRect(rectangles[23].x,rectangles[23].y,rectangles[23].width,rectangles[23].height);
+					context.strokeRect(rectangles[23].x,rectangles[23].y,rectangles[23].width,rectangles[23].height);
+					context.drawImage(rectangles[23].color1,rectangles[23].x,rectangles[23].y);
+					shiftKeyactive=0;
+				}
+
+				// if(str[i]==" ")
+				//alert(charc+str[i]);
+				//context.fillStyle = "blue";
+				context.clearRect(60,120,880,90);
+
+				//streng[i]=str[i];
+				cursorShift=70;
+				//var string1;
+				for(var j=0;j<=i;j++)
+				{
+					context.fillText(str[j],cursorShift,185);
+					//context.fillstyle="black";
+					if(charc=='I')
+					cursorShift=cursorShift+16;
+					else
+					cursorShift=cursorShift+18;
+				}
+				i++;
+				strLength++;
+			} 
+
+
+		}
+
+
+
+			function defaultStrings()//set string default 
+			{      i=0;
+				context.clearRect(50,140,1100,80);
+				cursorShift=70;
+				strCount=tempCount;
+				str=strings[strCount];
+				//alert(strings[1]);
+				//alert(strCount);
+				tempCount++;
+				startCountTimes=1;
+				if(tempCount==totalStrCount)
+				tempCount=0;
+			}
+
+
+/*	function Chr(AsciiNum)//to convert ascci to character
+{
+return String.fromCharCode(AsciiNum)
+}
+*/
+		function charConvert(Ascii)
+		{
+			if( Ascii==44) chac=',';
+			if( Ascii==46) chac='.';
+			if( Ascii==58) chac=':';
+			if( Ascii==59) chac=';';
+			if( Ascii==60) chac='<';
+			if( Ascii==61) chac='='; 		
+			if( Ascii==62) chac='>'; 	
+			if( Ascii==63) chac='?';	
+			if( Ascii==65) chac='A';	
+			if( Ascii==66) chac='B';
+			if( Ascii==67) chac='C';
+			if( Ascii==68) chac='D';
+			if( Ascii==69) chac='E';
+			if( Ascii==70) chac='F';	
+			if( Ascii==71) chac='G';
+			if( Ascii==72) chac='H';
+			if( Ascii==73) chac='I';
+			if( Ascii==74) chac='J';
+			if( Ascii==75) chac='K';	
+			if( Ascii==76) chac='L';
+			if( Ascii==77) chac='M';
+			if( Ascii==78) chac='N';
+			if( Ascii==79) chac='O';
+			if( Ascii==80) chac='P';	
+			if( Ascii==81) chac='Q';
+			if( Ascii==82) chac='R';
+			if( Ascii==83) chac='S';
+			if( Ascii==84) chac='T';
+			if( Ascii==85) chac='U';	
+			if( Ascii==86) chac='V';
+			if( Ascii==87) chac='W';
+			if( Ascii==88) chac='X';
+			if( Ascii==89) chac='Y';
+			if( Ascii==90) chac='Z';	
+			if( Ascii==91) chac='[';	
+			if( Ascii==93) chac=']'; 	
+			if( Ascii==97) chac='a'; 
+			if( Ascii==98)	 chac='b'; 
+			if( Ascii==99)	 chac='c'; 
+			if( Ascii==100)	 chac='d'; 
+			if( Ascii==101)	 chac='e'; 	
+			if( Ascii==102)	 chac='f'; 
+			if( Ascii==103)	 chac='g'; 	
+			if( Ascii==104)	 chac='h'; 
+			if( Ascii==105)	 chac='i'; 	
+			if( Ascii==106)	 chac='j'; 
+			if( Ascii==107)	 chac='k'; 	
+			if( Ascii==108)	 chac='l'; 
+			if( Ascii==109)	 chac='m'; 	
+			if( Ascii==110)	 chac='n'; 
+			if( Ascii==111)	 chac='o'; 	
+			if( Ascii==112)	 chac='p'; 
+			if( Ascii==113)	 chac='q'; 	
+			if( Ascii==114)	 chac='r'; 
+			if( Ascii==115)	 chac='s'; 	
+			if( Ascii==116)	 chac='t'; 	
+			if( Ascii==117)	 chac='u'; 
+			if( Ascii==118)	 chac='v'; 	
+			if( Ascii==119)	 chac='w'; 
+			if( Ascii==120)	 chac='x'; 	
+			if( Ascii==121)	 chac='y'; 
+			if( Ascii==122)	 chac='z'; 	
+			if( Ascii==123)	 chac='{'; 
+			if( Ascii==125)	 chac='}'; 
+			if( Ascii==132)	 chac='"'; 
+			if(Ascii==32) chac=' '; 
+			return chac;
+		}
+
+		function displayTime(time)
+		{
+			//document.getElementById('time').innerHTML = "endTime: " + endTime + " <br/>startTime: " + startTime + " <br/>time: "  + parseInt(time / 1000)  + "<br/> words/min : 35";
+			document.getElementById('time').innerHTML = "time: "  + parseInt(time/1000) 
+			+ " sec <br/>"+"speed:"+ parseInt(( (countSpace* 60000)/time))+" words/min ";
+			stopTime=time;
+			
+		}
+
+
+		function stopCounting(stopTime)
+		{ stops_count=0;
+		    
+			document.getElementById('time').innerHTML = "time: "  + parseInt(stopTime/1000) 
+			+ " sec <br/>"+"speed:"+ parseInt(( (countSpace* 60000)/stopTime))+" words/min ";
+		}
+
+</script>
+
+<title>Typing tutor</title>
+</head>
+<body>
+<div id="wrapper">
+
+
+<div id="button">
+<button onclick = "defaultStrings();" type="submit" name="GET" value="Default">click to <br>add string</button>
+</div>
+
+<div id="time"></div>
+
+<button onclick = "stopCounting();" type="submit" name="GET" value="Default">stop counting</button>
+<canvas id="canvas" style="border:solid;" height="500px;" width="1000px;"bgcolor="#FFFFFF;"></canvas> 
+<div id="sprites">
+
+</div>	
+</div>
+<div id="footer" >			
+			<p>
+			Developed By :<br/>
+			<a href="http://semicolondev.com">Semicolon developers Network Pvt. Ltd.</a><br/>
+			Shankhamul, Kathmandu<br/>
+			Contact Number: +977-1-4785058<br/>
+			Email: info [at] semicolondev.com<br/>
+			</p>
+	</div>	
+</body>
+</html>

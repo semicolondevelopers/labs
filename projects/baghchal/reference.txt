@@ -1,0 +1,19 @@
+1. Project name: flip5 (old)
+2. Objective: Participation in http://10k.aneventapart.com competetion
+
+3. HTML 5 Reference site: http://diveintohtml5.org
+
+4. HTML 5 examples: http://www.phpguru.org/html5-examples
+
+
+5.html4 to 5 changes 
+http://expansive-derivation.ossreleasefeed.com/2010/08/introduction-to-html5/
+
+6.demo & example code for HTML5
+http://www.html5rocks.com/
+
+7.http://www.webreference.com/programming/javascript/mk/column2/
+
+8.http://luke.breuer.com/tutorial/javascript-drag-and-drop-tutorial.aspx
+
+9.http://www.dynamicdrive.com/dynamicindex11/domdrag/
