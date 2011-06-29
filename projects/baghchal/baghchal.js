@@ -39,16 +39,16 @@
 
 	//resources
 	var rect= new Image(60,60);
-	rect.src= "rect.png";
+	rect.src= "./rect.png";
 
 	var bag_img = new Image(60,60);
-	bag_img.src= "tiger.png";
+	bag_img.src= "./tiger.png";
 
 	var goat_img = new Image(50,50);
-	goat_img.src= "goat.png";
+	goat_img.src= "./goat.png";
 
 	var board_img= new Image(600,600);
-	board_img.src= "board.png";
+	board_img.src= "./board.png";
 
 	// goat handling
 
